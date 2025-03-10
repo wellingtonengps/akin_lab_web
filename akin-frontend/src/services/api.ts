@@ -1,3 +1,4 @@
+import type { AuthResponse } from "@/types/authResponse";
 import type { User } from "@/types/user";
 import axios from "axios";
 
@@ -38,6 +39,43 @@ export const loginUser = async (credentials: {
     return response.data;
   } catch (error) {
     console.error("Erro ao buscar usuários:", error);
+    throw error;
+  }
+};
+
+export const deleteUser = async (id: number, token: string) => {
+  try {
+    await api.delete(`/user/${id}`, {
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    });
+  } catch (error) {
+    console.error("Erro ao excluir usuário:", error);
+    throw error;
+  }
+};
+
+export const createUser = async (user: Partial<User>) => {
+  try {
+    const response = await api.post(`/user/create`, user);
+    return response.data;
+  } catch (error) {
+    console.error("Erro ao criar usuário:", error);
+    throw error;
+  }
+};
+
+export const updateUser = async (user: Partial<User>, token: string) => {
+  try {
+    const response = await api.put(`/user/${user.id}`, user, {
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    });
+    return response.data;
+  } catch (error) {
+    console.error("Erro ao atualizar usuário:", error);
     throw error;
   }
 };
